@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="documentGenerator" name="documentGenerator" schema="schema/documentGenerator.exsd"/>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="com.opcoach.gendoc.GenerateDocumentHandler"
+            id="com.opcoach.gendoc.generateDocument"
+            name="Generate Document">
+         <commandParameter
+               id="com.opcoach.gendoc.generateDocument.generatorID"
+               name="generatorID"
+               optional="true">
+         </commandParameter>
+      </command>
+   </extension>
+     <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="true"
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <menu
+               id="com.opcoach.gendoc.documentGenerationMenu"
+               label="Document generation">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="com.opcoach.tcm.ui.oneParticipantSelected">
+               </reference>
+            </visibleWhen>
+            <dynamic
+                  class="com.opcoach.tcm.ui.ContributionItem1"
+                  id="com.opcoach.tcm.ui.dynamic1">
+            </dynamic>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            allPopups="true"
+            locationURI="popup:com.opcoach.tcm.ui.tcmMenu?after=additions">
+         <command
+               commandId="com.opcoach.tcm.ui.generateTrainingCertificate"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="com.opcoach.tcm.ui.EObjectSelected">
+      </definition>
+   </extension>
+
+</plugin>
