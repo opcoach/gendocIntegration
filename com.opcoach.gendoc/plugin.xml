@@ -26,28 +26,25 @@
             <visibleWhen
                   checkEnabled="false">
                <reference
-                     definitionId="com.opcoach.tcm.ui.oneParticipantSelected">
+                     definitionId="com.opcoach.tcm.ui.EObjectSelected">
                </reference>
             </visibleWhen>
             <dynamic
-                  class="com.opcoach.tcm.ui.ContributionItem1"
+                  class="com.opcoach.gendoc.DocumentGeneratorMenuContribution"
                   id="com.opcoach.tcm.ui.dynamic1">
             </dynamic>
          </menu>
-      </menuContribution>
-      <menuContribution
-            allPopups="true"
-            locationURI="popup:com.opcoach.tcm.ui.tcmMenu?after=additions">
-         <command
-               commandId="com.opcoach.tcm.ui.generateTrainingCertificate"
-               style="push">
-         </command>
       </menuContribution>
    </extension>
    <extension
          point="org.eclipse.core.expressions.definitions">
       <definition
             id="com.opcoach.tcm.ui.EObjectSelected">
+         <iterate>
+            <instanceof
+                  value="org.eclipse.emf.ecore.EObject">
+            </instanceof>
+         </iterate>
       </definition>
    </extension>
 
