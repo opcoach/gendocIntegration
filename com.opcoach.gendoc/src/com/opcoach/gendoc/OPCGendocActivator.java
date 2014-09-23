@@ -69,7 +69,8 @@ public class OPCGendocActivator extends AbstractUIPlugin {
 			gd.setId(elt.getAttribute("id"));
 			gd.setName(elt.getAttribute("name"));
 			gd.setTargetClassName(elt.getAttribute("targetClass"));
-			gd.setTemplateURL(b.getEntry(elt.getAttribute("template")));
+			String template = elt.getAttribute("template");
+			gd.setTemplateURL(b.getEntry(template));
 			String docType = elt.getAttribute("documentType");
 			if ("odt".equals(docType))
 				gd.setDocType(DocumentType.ODT);

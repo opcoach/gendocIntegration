@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<fragment>
+   <extension
+         point="com.opcoach.gendoc.documentGenerator">
+      <documentGenerator
+            documentType="odt"
+            id="com.opcoach.gendoc.test.sampleEObjectDoc"
+            name="Document Generator Test for EObject"
+            targetClass="org.eclipse.emf.ecore.impl.EObjectImpl"
+            template="odt/TestEObjectDocGeneration.odt">
+      </documentGenerator>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:com.opcoach.gendoc.documentGenerationMenu?after=additions">
+         <command
+               commandId="com.opcoach.gendoc.generateDocument"
+               label="Generate Document (hard coding)"
+               style="push">
+            <parameter
+                  name="com.opcoach.gendoc.generateDocument.generatorID"
+                  value="com.opcoach.gendoc.test.sampleEObjectDoc">
+            </parameter>
+         </command>
+      </menuContribution>
+   </extension>
+
+</fragment>

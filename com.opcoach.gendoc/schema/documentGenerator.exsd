@@ -22,6 +22,9 @@ Execution of the corresponding extensions will use the gendoc generator and the 
          </appinfo>
       </annotation>
       <complexType>
+         <sequence>
+            <element ref="documentGenerator" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>

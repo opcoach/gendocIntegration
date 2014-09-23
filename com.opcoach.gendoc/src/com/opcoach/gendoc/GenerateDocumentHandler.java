@@ -14,21 +14,23 @@ public class GenerateDocumentHandler extends AbstractHandler
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException
 	{
-		
+
 		String genId = event.getParameter("com.opcoach.gendoc.generateDocument.generatorID");
-		
+
 		ISelection sel = HandlerUtil.getCurrentSelection(event);
 		if (sel instanceof IStructuredSelection)
 		{
 			Object selected = ((IStructuredSelection) sel).getFirstElement();
 			if (selected instanceof EObject)
 			{
-				// Can get the path of current object and initialize the gendoc generator. 
+				// Can get the path of current object and initialize the gendoc
+				// generator.
 				GeneratorDesc gd = OPCGendocActivator.getDocumentGeneratorRegistry().get(genId);
-				System.out.println("Generating the document " + gd.getName() + " using template " + gd.getTemplateURL() + " for object Type " + gd.getTargetClassName());
+				System.out.println("Generating the document '" + gd.getName() + "' using template '" + gd.getTemplateURL()
+						+ "' for object Type '" + gd.getTargetClassName() + "'");
 			}
 		}
-		
+
 		return null;
 	}
 
