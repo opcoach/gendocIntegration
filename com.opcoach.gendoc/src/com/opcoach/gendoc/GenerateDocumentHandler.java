@@ -10,6 +10,8 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public class GenerateDocumentHandler extends AbstractHandler
 {
+	
+	static final String GENERATE_DOCUMENT_CMD_ID = "com.opcoach.gendoc.generateDocument";
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException
@@ -26,12 +28,17 @@ public class GenerateDocumentHandler extends AbstractHandler
 				// Can get the path of current object and initialize the gendoc
 				// generator.
 				GeneratorDesc gd = OPCGendocActivator.getDocumentGeneratorRegistry().get(genId);
-				System.out.println("Generating the document '" + gd.getName() + "' using template '" + gd.getTemplateURL()
-						+ "' for object Type '" + gd.getTargetClassName() + "'");
+				generateDocument((EObject)selected, gd);
 			}
 		}
 
 		return null;
+	}
+	
+	public static void generateDocument(EObject source, GeneratorDesc gd)
+	{
+		System.out.println("Generating the document '" + gd.getName() + "' using template '" + gd.getTemplateURL()
+				+ "' for object Type '" + gd.getTargetClassName() + "'");
 	}
 
 }

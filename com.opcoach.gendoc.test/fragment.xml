@@ -18,7 +18,7 @@
             locationURI="popup:com.opcoach.gendoc.documentGenerationMenu?after=additions">
          <command
                commandId="com.opcoach.gendoc.generateDocument"
-               label="Generate Document (hard coding)"
+               label="Generate Document (from test fragment)"
                style="push">
             <parameter
                   name="com.opcoach.gendoc.generateDocument.generatorID"
