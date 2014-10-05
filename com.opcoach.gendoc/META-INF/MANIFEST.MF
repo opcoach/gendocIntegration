@@ -8,6 +8,9 @@ Bundle-Vendor: OPCOACH
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.emf.ecore;bundle-version="2.10.0",
- org.eclipse.gendoc;bundle-version="0.5.0"
+ org.eclipse.gendoc;bundle-version="0.5.0",
+ org.eclipse.gendoc.services,
+ org.eclipse.gendoc.wizard;bundle-version="0.5.0",
+ org.eclipse.gendoc.tags.handlers;bundle-version="0.5.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
