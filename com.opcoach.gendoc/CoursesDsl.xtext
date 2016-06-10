@@ -1,0 +1,42 @@
+grammar com.opcoach.tcm.courses.CoursesDsl with org.eclipse.xtext.common.Terminals
+
+generate coursesDsl "http://www.opcoach.com/tcm/courses/CoursesDsl/1.0"
+
+Course:
+	'Course' name=EXPRESSION_STRING
+	'Language' WS* ':' WS* language=Lang
+	'Author' author=EXPRESSION_STRING
+	'Objectives' 
+     objectives+=EXPRESSION_STRING*
+	'Audience' 
+     audiences+=EXPRESSION_STRING*
+     'Prerequisites'
+     	prerequisite+=EXPRESSION_STRING*
+     'Duration' duration=INT
+     'Content\n'
+     blocs+=Bloc
+     ;
+	
+Bloc:
+	'*' title =EXPRESSION_STRING
+	lines+=EXPRESSION_STRING*
+	;
+	
+terminal EXPRESSION_STRING : (ID|WS)*;
+	
+
+enum Lang:
+  FR='French' | EN='English' | ES='Spanish';
+  
+  
+  
+  
+/*LINE:
+    // ('A'..'Z' | 'a'..'z') ('A'..'Z' | 'a'..'z' | '_' | '-' | '0'..'9')*
+    WS* ':' (WS* | !('\r' | '\n' | '//'))+
+;
+
+terminal S_LINE:
+    // ('A'..'Z' | 'a'..'z') ('A'..'Z' | 'a'..'z' | '_' | '-' | '0'..'9')*
+    !('\r' | '\n' | '//')+
+; */

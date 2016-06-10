@@ -6,6 +6,15 @@ public class GeneratorDesc
 {
 	private String id, name, targetClassName;
 	private URL templateURL;
+	private String outputPath;
+
+	public String getOutputPath() {
+		return outputPath;
+	}
+
+	public void setOutputPath(String outputPath) {
+		this.outputPath = outputPath;
+	}
 
 	private DocumentType docType;
 

@@ -38,7 +38,6 @@ public class DocumentGeneratorMenuContribution extends ContributionItem
 	@Override
 	public void fill(Menu menu, int index)
 	{
-		System.out.println("--->Enter in fill of contribution item");
 		super.fill(menu, index);
 
 		for (GeneratorDesc gd : OPCGendocActivator.getDocumentGeneratorRegistry().values())
@@ -74,7 +73,6 @@ public class DocumentGeneratorMenuContribution extends ContributionItem
 					{
 					case SWT.Selection:
 
-						System.out.println("On execute la commande pour le generator : " + gd.getId());
 
 						// This is a good handler can call the generate document
 						// on current selected EObject

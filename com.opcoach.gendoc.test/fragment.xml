@@ -5,8 +5,25 @@
          point="com.opcoach.gendoc.documentGenerator">
       <documentGenerator
             documentType="odt"
-            id="com.opcoach.gendoc.test.sampleEObjectDoc"
-            name="Document Generator Test for EObject"
+            id="com.opcoach.gendoc.test.sampleEObjectDocRel"
+            name="Document Generator Test for EObject (Relative)"
+            outputPath="../src-gen/${resourceName}_report.odt"
+            targetClass="org.eclipse.emf.ecore.impl.EObjectImpl"
+            template="odt/TestEObjectDocGeneration.odt">
+      </documentGenerator>
+      <documentGenerator
+            documentType="odt"
+            id="com.opcoach.gendoc.test.sampleEObjectDocAbs"
+            name="Document Generator Test for EObject (Absolute)"
+            outputPath="/src-genabs/${resourceName}_report.odt"
+            targetClass="org.eclipse.emf.ecore.impl.EObjectImpl"
+            template="odt/TestEObjectDocGeneration.odt">
+      </documentGenerator>
+      <documentGenerator
+            documentType="odt"
+            id="com.opcoach.gendoc.test.sampleEObjectDocUI"
+            name="Document Generator Test for EObject (UI)"
+            outputPath="ui"
             targetClass="org.eclipse.emf.ecore.impl.EObjectImpl"
             template="odt/TestEObjectDocGeneration.odt">
       </documentGenerator>
@@ -18,11 +35,29 @@
             locationURI="popup:com.opcoach.gendoc.documentGenerationMenu?after=additions">
          <command
                commandId="com.opcoach.gendoc.generateDocument"
-               label="Generate Document (from test fragment)"
+               label="Generate Document (from test fragment) Relative"
                style="push">
             <parameter
                   name="com.opcoach.gendoc.generateDocument.generatorID"
-                  value="com.opcoach.gendoc.test.sampleEObjectDoc">
+                  value="com.opcoach.gendoc.test.sampleEObjectDocRel">
+            </parameter>
+         </command>
+          <command
+               commandId="com.opcoach.gendoc.generateDocument"
+               label="Generate Document (from test fragment) Absolute"
+               style="push">
+            <parameter
+                  name="com.opcoach.gendoc.generateDocument.generatorID"
+                  value="com.opcoach.gendoc.test.sampleEObjectDocAbs">
+            </parameter>
+         </command>
+          <command
+               commandId="com.opcoach.gendoc.generateDocument"
+               label="Generate Document (from test fragment) UI"
+               style="push">
+            <parameter
+                  name="com.opcoach.gendoc.generateDocument.generatorID"
+                  value="com.opcoach.gendoc.test.sampleEObjectDocUI">
             </parameter>
          </command>
       </menuContribution>

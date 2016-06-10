@@ -1,30 +1,39 @@
 package com.opcoach.gendoc;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.ui.dialogs.ResourceDialog;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.workspace.util.WorkspaceSynchronizer;
 import org.eclipse.gendoc.GendocProcess;
 import org.eclipse.gendoc.services.GendocServices;
 import org.eclipse.gendoc.services.IGendocDiagnostician;
 import org.eclipse.gendoc.services.IProgressMonitorService;
 import org.eclipse.gendoc.services.exception.GenDocException;
+import org.eclipse.gendoc.services.exception.ModelNotFoundException;
+import org.eclipse.gendoc.tags.handlers.IConfigurationService;
+import org.eclipse.gendoc.tags.handlers.IEMFModelLoaderService;
+import org.eclipse.gendoc.tags.handlers.impl.context.EMFModelLoaderService;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -94,19 +103,24 @@ public class GenerateDocumentHandler extends AbstractHandler
 			
 			try
 			{
-			/*	IConfigurationService parameter = GendocServices.getDefault().getService(IConfigurationService.class);
-				parameter.addParameter(replacePercentBySpace(page.getSelected().getOutputKey(), 3), replacePercentBySpace(page.getFullOutputPath(), 3));
-				parameter.addParameter(replacePercentBySpace(page.getSelected().getModelKey(), 3), replacePercentBySpace(page.getModel(), 3));
-				for(AdditionnalParameterItem item : page.getAdditionnalParameters()) {
-					parameter.addParameter(replacePercentBySpace(item.getParamName(),3), replacePercentBySpace(item.getValue(),3));
-				}
-				*/
 				
 				GendocProcess gendocProcess = new GendocProcess();
+				
+				EMFModelLoaderService service = new EMFModelLoaderService(){
+					@Override
+					public EObject getModel(URI path) throws ModelNotFoundException {
+						return source;
+					}
+				};
+				service.setServiceId("IEMFModelLoaderService");
+				GendocServices.getDefault().setService(IEMFModelLoaderService.class, service);
+				
+
+				IConfigurationService conf = GendocServices.getDefault().getService(IConfigurationService.class);
+				conf.setOutput(getOutpuPath());
 				URL templateUrl = gd.getTemplateURL();
-				URL fUrl = FileLocator.toFileURL(templateUrl);
-				File f = new File(fUrl.toURI());
-				String resultFile = gendocProcess.runProcess(f);
+				
+				String resultFile = gendocProcess.runProcess(templateUrl);
 				
 				handleDiagnostic(diagnostician.getResultDiagnostic(), "The file has been generated but contains errors :\n", resultFile);
 			}
@@ -128,6 +142,87 @@ public class GenerateDocumentHandler extends AbstractHandler
 			}
 		}
 		
+		private String getOutpuPath() {
+			String path = gd.getOutputPath();
+			String outputPath = null;
+			if ("ui".equals(path)) {
+				outputPath = dialog ();
+			}
+			else if (path.startsWith(".")) {
+				outputPath = relative(path);
+			}
+			else if (path.startsWith("/")) {
+				outputPath = absolute(path);
+			}
+			return outputPath;
+		}
+
+		private String absolute(String path) {
+			path = substitute(path);
+			if (source.eResource().getURI().isPlatformResource()){
+				IFile f = WorkspaceSynchronizer.getFile(source.eResource());
+				IFile resultFile = f.getProject().getFile(new Path(path));
+				resultFile.getParent().getLocation().toFile().mkdirs();
+				return resultFile.getLocation().toFile().getAbsolutePath();
+			}
+			return null;
+		}
+
+		/**
+		 * Returns an absolute file path corresponding to a project URI
+		 * @param path
+		 * @return
+		 */
+		private String getFileFromProjectPath(String path) {
+			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(path));
+			file.getParent().getLocation().toFile().mkdirs();
+			return file.getLocation().toFile().getAbsolutePath();
+		}
+
+		private String substitute(String path) {
+			path = path.replace("${resourceName}", getResourceName());
+			return path;
+		}
+
+		private CharSequence getResourceName() {
+			return source.eResource().getURI().trimFileExtension().lastSegment();
+		}
+
+		private String relative(String path) {
+			path = substitute (path);
+			URI sourceURI = source.eResource().getURI();
+			URI result = URI.createURI(path).resolve(sourceURI);
+			if (result.isFile()){
+				return result.path();
+			}
+			else if (result.isPlatformResource()){
+				return getFileFromProjectPath(result.toPlatformString(true));
+			}
+			return "";
+		}
+
+		private String dialog() {
+			final StringBuffer buffer = new StringBuffer();
+			Display.getDefault().syncExec(new Runnable() {
+				
+				@Override
+				public void run() {
+					ResourceDialog d = new ResourceDialog(Display.getDefault().getActiveShell(), "Output template path", SWT.SAVE);
+					if (d.open() == ResourceDialog.OK){
+						URI uri = URI.createURI(d.getURIText());
+						if (uri.isPlatformResource()){
+							buffer.append(getFileFromProjectPath(uri.toPlatformString(true)));
+						}
+						else {
+							buffer.append(uri.toFileString());
+						}
+					}
+					
+				}
+			});
+			return buffer.toString();
+		}
+
 		/**
 		 * Handle diagnostic.
 		 * 

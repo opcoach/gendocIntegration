@@ -106,6 +106,28 @@ Execution of the corresponding extensions will use the gendoc generator and the 
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="outputPath" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Specify the relative path from the selected resource. Use either : 
+
+- &apos;ui&apos; -&gt; to get a dialog to ask user
+- &apos;./pathToOutput/${resourceName}.odt&apos; -&gt; relative path from resource location
+- /pathToOutput/${resourceName}.odt -&gt; absolute path in the project
+
+Sample : 
+
+Relative to resource:
+../src-gen/${resourceName}_report.odt -&gt; will generate /project/src-gen/sample_report.odt for an EObject stored in the /project/model/sample.xxx file
+
+Absolute in project:
+/src-gen/${resourceName}_report.odt -&gt; will generate /src-gen/sample_report.odt for an EObject stored in any sample.xxx file stored in the project. 
+
+User interaction : 
+ui  -&gt; a resource dialog relative to workspace will be displayed.
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

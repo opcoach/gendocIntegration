@@ -68,6 +68,7 @@ public class OPCGendocActivator extends AbstractUIPlugin {
 			GeneratorDesc gd = new GeneratorDesc();
 			gd.setId(elt.getAttribute("id"));
 			gd.setName(elt.getAttribute("name"));
+			gd.setOutputPath(elt.getAttribute("outputPath"));
 			gd.setTargetClassName(elt.getAttribute("targetClass"));
 			String template = elt.getAttribute("template");
 			gd.setTemplateURL(b.getEntry(template));
